@@ -146,23 +146,3 @@ public class RestTest {
         System.out.println(response.getBody().prettyPrint());
     }
 }
-
-//        given()
-//                .baseUri("https://reqres.in/api")
-//                .basePath("/users")
-//                .contentType(ContentType.JSON)
-//                .when()
-//                .log().all()
-//                .get("/api/users/2")
-//                .then()
-//                .log().all()
-//                .and()
-//                .assertThat()
-//                .statusCode(200)
-//                .extract().asString()
-                //.body("data.id", equalTo(2))
-
-
-//        Assertions.assertEquals(200, response.getStatusCode());
-//        Assertions.assertEquals(2, response.jsonPath().getInt("data.id"));
-
