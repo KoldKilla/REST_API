@@ -1,18 +1,12 @@
 package org.ibs;
 
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.config.SSLConfig;
+package org.ibs;
+
 import io.restassured.http.ContentType;
-import io.restassured.http.Cookie;
-import io.restassured.http.Cookies;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import pojos.UserPojo;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 import static org.ibs.Specifications.sessionID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
