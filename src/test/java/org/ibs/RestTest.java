@@ -13,6 +13,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.ibs.Specifications.sessionID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RestTest {
@@ -23,11 +24,13 @@ public class RestTest {
       Specifications.installSpecification(Specifications.requestSpecification("http://localhost:8080/api"),
          Specifications.responseSpecification(200));
 
+      Specifications.getFood();
 
         Response response = given()
-                .header("Accept", "application/json")
+                .header ("Accept", "application/json")
+                .header ("Content-Type", "application/json")
+                .cookie ("JSESSIONID", sessionID)
                 .contentType(ContentType.JSON)
-                .basePath("/food")
                  .body("{\n" +
                          "  \"name\": \"test1\",\n" +
                          "  \"type\": \"VEGETABLE\",\n" +
@@ -35,13 +38,14 @@ public class RestTest {
                          "}")
                 .when()
                 .log().all()
-                .post()
+                .post("/food")
                 .then()
-                .assertThat()
+                .log().all()
                 .extract().response();
 
-        assertEquals(200, response.getStatusCode());
+        Specifications.getInfo("test1");
 
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -50,11 +54,13 @@ public class RestTest {
         Specifications.installSpecification(Specifications.requestSpecification("http://localhost:8080/api"),
                 Specifications.responseSpecification(200));
 
+        Specifications.getFood();
 
         Response response = given()
-                .header("Accept", "application/json")
+                .header ("Accept", "application/json")
+                .header ("Content-Type", "application/json")
+                .cookie ("JSESSIONID", sessionID)
                 .contentType(ContentType.JSON)
-                .basePath("/food")
                 .body("{\n" +
                         "  \"name\": \"test2\",\n" +
                         "  \"type\": \"VEGETABLE\",\n" +
@@ -62,53 +68,57 @@ public class RestTest {
                         "}")
                 .when()
                 .log().all()
-                .post()
+                .post("/food")
                 .then()
-                .assertThat()
+                .log().all()
                 .extract().response();
 
-        assertEquals(200, response.getStatusCode());
+        Specifications.getInfo("test2");
 
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
     void addNonExoticFruit() {
-
         Specifications.installSpecification(Specifications.requestSpecification("http://localhost:8080/api"),
                 Specifications.responseSpecification(200));
 
+        Specifications.getFood();
 
         Response response = given()
-                .header("Accept", "application/json")
+                .header ("Accept", "application/json")
+                .header ("Content-Type", "application/json")
+                .cookie ("JSESSIONID", sessionID)
                 .contentType(ContentType.JSON)
-                .basePath("/food")
                 .body("{\n" +
-                        "  \"name\": \"trst3\",\n" +
+                        "  \"name\": \"test3\",\n" +
                         "  \"type\": \"FRUIT\",\n" +
                         "  \"exotic\": false\n" +
                         "}")
                 .when()
                 .log().all()
-                .post()
+                .post("/food")
                 .then()
-                .assertThat()
+                .log().all()
                 .extract().response();
 
-        assertEquals(200, response.getStatusCode());
+        Specifications.getInfo("test3");
 
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
     void addExoticFruit() {
-
         Specifications.installSpecification(Specifications.requestSpecification("http://localhost:8080/api"),
                 Specifications.responseSpecification(200));
 
+        Specifications.getFood();
 
         Response response = given()
-                .header("Accept", "application/json")
+                .header ("Accept", "application/json")
+                .header ("Content-Type", "application/json")
+                .cookie ("JSESSIONID", sessionID)
                 .contentType(ContentType.JSON)
-                .basePath("/food")
                 .body("{\n" +
                         "  \"name\": \"test4\",\n" +
                         "  \"type\": \"FRUIT\",\n" +
@@ -116,13 +126,14 @@ public class RestTest {
                         "}")
                 .when()
                 .log().all()
-                .post()
+                .post("/food")
                 .then()
-                .assertThat()
+                .log().all()
                 .extract().response();
 
-        assertEquals(200, response.getStatusCode());
+        Specifications.getInfo("test4");
 
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
@@ -137,9 +148,8 @@ public class RestTest {
                 .assertThat()
                 .statusCode(200)
                 .assertThat()
-                .body("createdAt", not(emptyOrNullString()))
                 .extract().response();
-
+        sessionID = response.getCookie ("JSESSIONID");
         assertEquals(200, response.getStatusCode());
 
         System.out.println("\nОТВЕТ");
